@@ -5,7 +5,7 @@
  *
  * @author Nicola Lambathakis http://www.tattoocms.it/ https://github.com/Nicola1971/
  * @category    plugin
- * @version    1.0
+ * @version    1.1
  * @license	 http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
  * @internal    @events OnWebPageInit
  * @internal    @installset base
