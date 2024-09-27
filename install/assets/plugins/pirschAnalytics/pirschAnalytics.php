@@ -14,8 +14,8 @@
  * @internal    @disabled 0
  * @lastupdate  27-09-2024
  * @documentation Requirements: This plugin requires Evolution 1.4 or later
- * @documentation https://github.com/Nicola1971/PirschAnalytics/
- * @reportissues https://github.com/Nicola1971/PirschAnalytics/issues
+ * @documentation https://github.com/Nicola1971/pirschAnalytics/
+ * @reportissues https://github.com/Nicola1971/pirschAnalytics/issues
  */
 
 if (!defined('IN_MANAGER_MODE') || IN_MANAGER_MODE !== true) {
