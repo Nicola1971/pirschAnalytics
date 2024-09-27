@@ -1,7 +1,7 @@
 /**
  * Pirsch Analytics
  *
- * Pirsch Analytics serverside integration plugin
+ * Pirsch Analytics server side integration plugin
  *
  * @author Nicola Lambathakis http://www.tattoocms.it/ https://github.com/Nicola1971/
  * @category    plugin
@@ -19,9 +19,7 @@
  */
 
 if (!defined('IN_MANAGER_MODE') || IN_MANAGER_MODE !== true) {
-    // Solo per il frontend
     $eventName = $modx->event->name;
-
     switch ($eventName) {
         case 'OnWebPageInit':
             include_once MODX_BASE_PATH . 'assets/plugins/pirschAnalytics/pirschAnalytics.php';

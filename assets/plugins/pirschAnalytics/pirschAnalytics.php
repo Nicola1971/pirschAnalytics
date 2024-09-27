@@ -3,7 +3,7 @@
 function sendToPirschAnalytics($url, $client_ip, $access_key) {
     $api_url = 'https://api.pirsch.io/api/v1/hit';
 
-    // Prepara i dati
+    // Prepare the data
     $data = array(
         'url' => $url,
         'ip' => $client_ip,
@@ -17,45 +17,46 @@ function sendToPirschAnalytics($url, $client_ip, $access_key) {
         'sec_ch_viewport_width' => isset($_SERVER['HTTP_SEC_CH_VIEWPORT_WIDTH']) ? $_SERVER['HTTP_SEC_CH_VIEWPORT_WIDTH'] : null,
         'referrer' => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null,
         'tags' => array(
-            'example_tag' => 'example_value'  // Puoi modificare o aggiungere tag personalizzati
+            'example_tag' => 'example_value'  // You can modify or add custom tags
         )
     );
 
-    // Rimuovi i valori nulli dal payload
+    // Remove null values from the payload
     $data = array_filter($data);
 
-    // Crea la richiesta
+    // Create the request
     $ch = curl_init($api_url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
         'Content-Type: application/json',
-        'Authorization: Bearer ' . $access_key  // Usa l'access key configurata
+        'Authorization: Bearer ' . $access_key  // Use the configured access key
     ));
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 
-    // Esegui la richiesta
+    // Execute the request
     $response = curl_exec($ch);
     curl_close($ch);
 
-    // Controlla la risposta
+    // Check the response
     if ($response === false) {
         global $modx;
-        $modx->logEvent(1, 3, 'Errore nell\'invio dei dati a Pirsch Analytics', 'Pirsch Analytics Plugin');
+        $modx->logEvent(1, 3, 'Error sending data to Pirsch Analytics', 'Pirsch Analytics Plugin');
     }
 }
 
-// Ottieni l'URL corrente
+// Get the current URL
 $url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 $client_ip = $_SERVER['REMOTE_ADDR'];
 
-// Leggi la Pirsch Access Key dalle configurazioni del plugin
-$access_key = $modx->getPluginConfig('pirsch_access_key');
+// Use $modx->event->params to get the plugin configuration
+$params = $modx->event->params;
+$access_key = isset($params['pirsch_access_key']) ? $params['pirsch_access_key'] : null;
 
-// Verifica che la chiave non sia vuota
+// Check if the access key is not empty
 if (!empty($access_key)) {
     sendToPirschAnalytics($url, $client_ip, $access_key);
 } else {
     global $modx;
-    $modx->logEvent(1, 3, 'Pirsch Access Key non configurata', 'Pirsch Analytics Plugin');
+    $modx->logEvent(1, 3, 'Pirsch Access Key not configured or not found. Access key value: ' . var_export($access_key, true), 'Pirsch Analytics Plugin');
 }
