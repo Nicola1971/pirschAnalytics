@@ -1,7 +1,5 @@
 <?php
 
-<?php
-
 function sendToPirschAnalytics($url, $client_ip, $access_key) {
     $api_url = 'https://api.pirsch.io/api/v1/hit';
 
