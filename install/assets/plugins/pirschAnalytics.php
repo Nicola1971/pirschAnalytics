@@ -1,5 +1,5 @@
 /**
- * PirschAnalytics
+ * pirschAnalytics
  *
  * Pirsch Analytics server side integration plugin
  *
