@@ -17,7 +17,6 @@
  * @documentation https://github.com/Nicola1971/pirschAnalytics/
  * @reportissues https://github.com/Nicola1971/pirschAnalytics/issues
  */
-
 if (!defined('IN_MANAGER_MODE') || IN_MANAGER_MODE !== true) {
     $eventName = $modx->event->name;
     switch ($eventName) {
