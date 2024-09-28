@@ -11,7 +11,7 @@
  * @internal    @installset base
  * @internal    @modx_category SEO
  * @internal    @properties &pirsch_access_key= Pirsch Access Key:;string;
- * @internal    @disabled 0
+ * @internal    @disabled 1
  * @lastupdate  27-09-2024
  * @documentation Requirements: This plugin requires Evolution 1.4 or later
  * @documentation https://github.com/Nicola1971/pirschAnalytics/
