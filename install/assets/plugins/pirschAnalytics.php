@@ -3,7 +3,7 @@
  *
  * Pirsch Analytics server side integration plugin
  *
- * @author Nicola Lambathakis http://www.tattoocms.it/ https://github.com/Nicola1971/
+ * @author Nicola Lambathakis http://www.tattoocms.it/
  * @category    plugin
  * @version    1.1
  * @license	 http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
