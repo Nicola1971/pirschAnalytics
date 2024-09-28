@@ -16,9 +16,6 @@ function sendToPirschAnalytics($url, $client_ip, $access_key) {
         'sec_ch_width' => isset($_SERVER['HTTP_SEC_CH_WIDTH']) ? $_SERVER['HTTP_SEC_CH_WIDTH'] : null,
         'sec_ch_viewport_width' => isset($_SERVER['HTTP_SEC_CH_VIEWPORT_WIDTH']) ? $_SERVER['HTTP_SEC_CH_VIEWPORT_WIDTH'] : null,
         'referrer' => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null,
-        'tags' => array(
-            'example_tag' => 'example_value'  // You can modify or add custom tags
-        )
     );
 
     // Remove null values from the payload
