@@ -1,13 +1,12 @@
 <?php
 
-// Funzione per inviare eventi personalizzati a Pirsch
-function sendPirschEvent($event_name, $event_data, $client_ip, $access_key, $tags = array()) {
-    $api_url = 'https://api.pirsch.io/api/v1/event';
+// Funzione per inviare hit a Pirsch Analytics
+function sendToPirschAnalytics($url, $client_ip, $access_key, $tags = array()) {
+    $api_url = 'https://api.pirsch.io/api/v1/hit';
 
-    // Prepara i dati dell'evento
+    // Prepara i dati per l'invio
     $data = array(
-        'name' => $event_name,
-        'params' => $event_data,
+        'url' => $url,
         'ip' => $client_ip,
         'user_agent' => $_SERVER['HTTP_USER_AGENT'],
         'accept_language' => isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : null,
@@ -18,14 +17,13 @@ function sendPirschEvent($event_name, $event_data, $client_ip, $access_key, $tag
         'sec_ch_width' => isset($_SERVER['HTTP_SEC_CH_WIDTH']) ? $_SERVER['HTTP_SEC_CH_WIDTH'] : null,
         'sec_ch_viewport_width' => isset($_SERVER['HTTP_SEC_CH_VIEWPORT_WIDTH']) ? $_SERVER['HTTP_SEC_CH_VIEWPORT_WIDTH'] : null,
         'referrer' => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null,
-        'url' => 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'],
         'tags' => $tags  // Aggiungi i tags personalizzati
     );
 
-    // Filtra valori nulli dall'array dei dati
+    // Rimuovi i valori nulli dal payload
     $data = array_filter($data);
 
-    // Crea la richiesta
+    // Crea la richiesta CURL
     $ch = curl_init($api_url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
@@ -39,45 +37,24 @@ function sendPirschEvent($event_name, $event_data, $client_ip, $access_key, $tag
     $response = curl_exec($ch);
     curl_close($ch);
 
-    // Logga l'errore in caso di fallimento
+    // Log in caso di errore
     if ($response === false) {
         global $modx;
-        $modx->logEvent(1, 3, 'Error sending event to Pirsch Analytics', 'Pirsch Analytics Plugin');
+        $modx->logEvent(1, 3, 'Errore nell\'invio dei dati a Pirsch Analytics', 'Pirsch Analytics Plugin');
     }
 }
 
-// Funzione per tracciare le pagine 404 come eventi
-function track404Error($client_ip, $access_key, $tags = array()) {
-    $url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; // Include query string
-    $event_name = '404_error';  // Evento per errore 404
-    $event_data = array('url' => $url);
-
-    // Invia l'evento come 404 a Pirsch
-    sendPirschEvent($event_name, $event_data, $client_ip, $access_key, $tags);
-}
-
-// Ottieni la configurazione del plugin usando $modx->event->params
-$params = $modx->event->params;
-$access_key = isset($params['pirsch_access_key']) ? $params['pirsch_access_key'] : null;
-$event_string = isset($params['pirsch_events']) ? $params['pirsch_events'] : ''; // Configurazione degli eventi
-$tags_string = isset($params['pirsch_tags']) ? $params['pirsch_tags'] : ''; // Configurazione dei tags
+// Ottieni l'URL corrente e l'IP dell'utente
+$url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 $client_ip = $_SERVER['REMOTE_ADDR'];
 
-// Ottieni la query string dall'URL
-$query = isset($_GET['query']) ? $_GET['query'] : null;
-
-// Parsing degli eventi (esempio: "button_click,subscribe_button|form_submit,contact_form")
-$event_array = array();
-if (!empty($event_string)) {
-    $event_groups = explode('|', $event_string); // Divide per gruppi usando '|'
-    foreach ($event_groups as $group) {
-        list($event_name, $event_param) = explode(',', $group); // Divide in nome evento e parametro
-        $event_array[trim($event_name)] = trim($event_param);
-    }
-}
+// Ottieni la Pirsch Access Key e i tags dalla configurazione del plugin
+$params = $modx->event->params;
+$access_key = isset($params['pirsch_access_key']) ? $params['pirsch_access_key'] : null;
+$tags_string = isset($params['pirsch_tags']) ? $params['pirsch_tags'] : ''; // Configurazione dei tags
 
 // Parsing dei tags (esempio: "user_status,logged_in|device_type,desktop")
-$tags_array = array('query' => $query); // Aggiungi la query string come tag
+$tags_array = array();
 if (!empty($tags_string)) {
     $tag_groups = explode('|', $tags_string); // Divide per gruppi usando '|'
     foreach ($tag_groups as $group) {
@@ -86,20 +63,11 @@ if (!empty($tags_string)) {
     }
 }
 
-// Verifica che la access key sia configurata
+// Verifica se la Access Key è configurata
 if (!empty($access_key)) {
-    // Invia ogni evento definito nella configurazione
-    foreach ($event_array as $event_name => $event_param) {
-        $event_data = array('param' => $event_param);
-
-        // Invia l'evento a Pirsch con i tags personalizzati, inclusa la query
-        sendPirschEvent($event_name, $event_data, $client_ip, $access_key, $tags_array);
-    }
-
-    // Traccia gli errori 404 utilizzando l'evento `OnPageNotFound`
-    if ($modx->event->name == 'OnPageNotFound') {
-        track404Error($client_ip, $access_key, $tags_array);  // Invio dell'errore 404 come evento
-    }
+    // Invia i dati a Pirsch Analytics con i tags
+    sendToPirschAnalytics($url, $client_ip, $access_key, $tags_array);
 } else {
-    $modx->logEvent(1, 3, 'Pirsch Access Key not configured or not found.', 'Pirsch Analytics Plugin');
+    global $modx;
+    $modx->logEvent(1, 3, 'Pirsch Access Key non configurata o non trovata.', 'Pirsch Analytics Plugin');
 }
