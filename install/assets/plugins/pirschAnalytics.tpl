@@ -10,7 +10,7 @@
  * @internal    @events OnWebPageComplete,OnPageNotFound 
  * @internal    @installset base
  * @internal    @modx_category SEO
- * @internal    @properties &pirsch_access_key= Pirsch Access Key:;string; &exclude_docs=Exclude Documents by id (comma separated);string; &exclude_templates=Exclude Templates by id (comma separated);string;
+ * @internal    @properties &pirsch_access_key= Pirsch Access Key:;string; &exclude_docs=Exclude Documents by id (comma separated);string; &exclude_templates=Exclude Templates by id (comma separated);string; &pirsch_tags=Tags:;string;
  * @internal    @disabled 1
  * @lastupdate  03-10-2024
  * @documentation Requirements: This plugin requires Evolution 1.4 or later
