@@ -46,16 +46,13 @@ function sendPirschEvent($event_name, $event_data, $client_ip, $access_key, $tag
     }
 }
 
-// Funzione per tracciare le pagine 404
+// Funzione per tracciare le pagine 404 come eventi
 function track404Error($client_ip, $access_key, $tags = array()) {
     $url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; // Include query string
-    $event_name = '404_error';
+    $event_name = '404_error';  // Evento per errore 404
     $event_data = array('url' => $url);
 
-    // Aggiungi un tag personalizzato per il tipo di errore
-    $tags['error_type'] = '404';
-
-    // Invia l'evento a Pirsch
+    // Invia l'evento come 404 a Pirsch
     sendPirschEvent($event_name, $event_data, $client_ip, $access_key, $tags);
 }
 
@@ -101,7 +98,7 @@ if (!empty($access_key)) {
 
     // Traccia gli errori 404 utilizzando l'evento `OnPageNotFound`
     if ($modx->event->name == 'OnPageNotFound') {
-        track404Error($client_ip, $access_key, $tags_array);
+        track404Error($client_ip, $access_key, $tags_array);  // Invio dell'errore 404 come evento
     }
 } else {
     $modx->logEvent(1, 3, 'Pirsch Access Key not configured or not found.', 'Pirsch Analytics Plugin');
