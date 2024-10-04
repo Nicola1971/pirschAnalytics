@@ -5,14 +5,14 @@
  *
  * @author Nicola Lambathakis http://www.tattoocms.it/
  * @category    plugin
- * @version    1.3
+ * @version    1.2
  * @license	 http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
- * @internal    @events OnWebPageComplete,OnPageNotFound 
+ * @internal    @events OnWebPageComplete
  * @internal    @installset base
  * @internal    @modx_category SEO
- * @internal    @properties &pirsch_access_key= Pirsch Access Key:;string; &exclude_docs=Exclude Documents by id (comma separated);string; &exclude_templates=Exclude Templates by id (comma separated);string; &pirsch_tags=Tags:;string;
+ * @internal    @properties &pirsch_access_key= Pirsch Access Key:;string; &exclude_docs=Exclude Documents by id (comma separated);string; &exclude_templates=Exclude Templates by id (comma separated);string;
  * @internal    @disabled 1
- * @lastupdate  03-10-2024
+ * @lastupdate  01-10-2024
  * @documentation Requirements: This plugin requires Evolution 1.4 or later
  * @documentation https://github.com/Nicola1971/pirschAnalytics/
  * @reportissues https://github.com/Nicola1971/pirschAnalytics/issues
